@@ -1,0 +1,38 @@
+﻿@model SaleOnline.Models.Category
+@{
+    ViewData["Title"] = "CapNhat";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="col-6 px-5 pt-5 border rounded-3 shadow-lg">
+        <h2 class="text-center fw-bold pb-4">Cập nhật thông tin danh mục</h2>
+        <hr />
+        <div id="error" class="text-danger"></div>
+        <form method="post" action="/Categories/CapNhat">
+            <div class="mb-4">
+                <label for="categoryId" class="form-label fw-bolder">Mã danh mục</label>
+                <input type="number" class="form-control" id="categoryId" name="categoryId" value="@Model.CategoryId" aria-describedby="text" readonly>
+
+            </div>
+            <div class="mb-4">
+                <label for="categoryName" class="form-label fw-bolder">Tên danh mục</label>
+                <input type="text" class="form-control" id="categoryName" name="categoryName" value="@(Model?.CategoryName ?? "")" aria-describedby="text" pattern=".+">
+            </div>
+            <div class="form-check">
+                @*<input class="form-check-input" type="checkbox" @(Model != null && Model.IsActive == true ? "checked" : "") name="kichhoat" id="kichhoat">*@
+                <input class="form-check-input" type="checkbox" @(Model?.IsActive == true ? "checked" : "") name="kichhoat" id="kichhoat">
+
+                <label class="form-check-label" for="kichhoat">
+                    Kích hoạt
+                </label>
+            </div>
+            <hr />
+            <div class="d-flex align-items-center justify-content-center my-5 gap-5">
+                <button type="submit" id="themgiohang" class="btn btn-primary px-4 py-2">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+

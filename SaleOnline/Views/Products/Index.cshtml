@@ -1,0 +1,160 @@
+﻿@model List<Product>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<nav class="navbar navbar-light bg-light">
+    <form class="form-inline" action="/Products/Index" method="get">
+        <div class="input-group">
+            <input class="form-control mr-sm-2" type="search" name="filter" placeholder="Search Name or Filter" aria-label="Search">
+            <input class="form-control mr-sm-2" type="number" name="productId" placeholder="Search Id" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    @*<a class="btn btn-primary" href="@Url.Action("Them", "Products")" role="button">Thêm</a>*@
+    <form action="@Url.Action("Them", "Products")" method="post">
+        <input type="submit" value="Thêm" class="btn btn-primary" role="button" />
+    </form>
+
+</nav>
+<table class="table table-striped overflow-scroll">
+    <thead class="table-success">
+         <tr>
+            <th>STT</th>
+            <th>Id</th>
+            <th>User</th>
+            <th>Cat</th>
+            <th>ProId </th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Description</th>
+            <th>Image</th>
+            <th>New</th>
+            <th>Sale</th>
+            <th>Pro</th>
+            <th>Filter</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int i = 0;
+            @foreach (var product in Model)
+            {
+                i++;
+                <tr>
+                    <td class="text-center">@i</td>
+                    <td>@product.ProductId</td>
+                    <td>@product.UserId</td>
+                    <td>@product.CategoryId</td>
+                    <td>@product.PromotionId</td>
+                    <td>@product.ProductName</td>
+                    <td>@string.Format("{0:N0}", product.ProductPrice)</td>
+
+
+
+
+                    <td>@product.ProducDes</td>
+                    <td><img src="@product.ProductImage" alt="Product Image" width="50" height="50"></td>
+                    @{
+                        var isNew = product.IsNew as bool?;
+                        var isNewClass = isNew.HasValue ? (isNew.Value ? "text-success" : "text-danger") : "text-warning";
+                        var isNewText = isNew.HasValue ? (isNew.Value ? "On" : "Off") : "Error";
+                    }
+                    <td class="text-center @isNewClass">
+                        @isNewText
+                    </td>
+                    @{
+                        var isSale = product.IsSale as bool?;
+                        var isSaleClass = isSale.HasValue ? (isSale.Value ? "text-success" : "text-danger") : "text-warning";
+                        var isSaleText = isSale.HasValue ? (isSale.Value ? "On" : "Off") : "Error";
+                    }
+                    <td class="text-center @isSaleClass">
+                        @isSaleText
+                    </td>
+                    @{
+                        var isPro = product.IsPro as bool?;
+                        var isProClass = isPro.HasValue ? (isPro.Value ? "text-success" : "text-danger") : "text-warning";
+                        var isProText = isPro.HasValue ? (isPro.Value ? "On" : "Off") : "Error";
+                    }
+                    <td class="text-center @isProClass">
+                        @isProText
+                    </td>
+                    <td>@product.Filter</td>
+                    @{
+                        var isActive = product.IsActive as bool?;
+                        var isActiveClass = isActive.HasValue ? (isActive.Value ? "text-success" : "text-danger") : "text-warning";
+                        var isActiveText = isActive.HasValue ? (isActive.Value ? "Kích hoạt" : "Tạm khóa") : "Lỗi";
+                    }
+                    <td class="text-center @isActiveClass">
+                        @isActiveText
+                    </td>
+
+                    <td class="text-center">
+                        <a class="px-2 delete-button" href="#deleteModal_@i" data-bs-toggle="modal" data-bs-target="#deleteModal_@i">
+                            <i class="fa fa-trash text-danger" aria-hidden="true"></i>
+                        </a>
+                        <div class="modal fade" id="deleteModal_@i" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Xác nhận</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @if (product.IsActive)
+                                        {
+                                            <p>Bạn không nên xóa, chỉ cần bỏ chọn kích hoạt.</p>
+                                        }
+                                        else
+                                        {
+                                            <p>Bạn có chắc chắn muốn xóa không?</p>
+                                        }
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        @if (product.IsActive)
+                                        {
+                                            <a href="@Url.Action("CapNhat", "Products", new { productId = product.ProductId })" class="btn btn-primary">Đồng ý</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Xoa", "Products", new { productId = product.ProductId })" class="btn btn-danger">Xóa</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="px-2" href="@Url.Action("CapNhat", "Products", new { productId = product.ProductId })">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                      @*  <form action="@Url.Action("CapNhat", "Products", new { productId = product.ProductId })" method="post">
+                            <button type="submit" class="px-2" style="border: none; background-color: transparent;">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </button>
+                        </form>*@
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <caption>
+                Không có dữ liệu
+            </caption>
+        }
+
+    </tbody>
+</table>
+
+<script>
+    function openDeleteModal(productId) {
+        $('#deleteModal_' + productId).modal('show');
+    }
+</script>
+

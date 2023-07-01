@@ -1,0 +1,73 @@
+﻿@model SaleOnline.Models.Category
+@{
+    ViewData["Title"] = "Them";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="col-6 px-5 pt-5 border rounded-3 shadow-lg">
+        <h2 class="text-center fw-bold pb-4">Thêm danh mục</h2>
+        <hr />
+        <div id="error" class="text-danger"></div>
+        <form action="/Categories/Them" method="post">
+            <div class="mb-4">
+                <label for="categoryId" class="form-label fw-bolder">Mã danh mục</label>
+                <input type="number" class="form-control" id="categoryId" name="categoryId" value="@(Model?.CategoryId == 0 ? "" : Model?.CategoryId.ToString())" aria-describedby="text" pattern="^[1-9]\d*$">
+            </div>
+            <div class="mb-4">
+                <label for="categoryName" class="form-label fw-bolder">Tên danh mục</label>
+                <input type="text" class="form-control" id="categoryName" name="categoryName" value="@Model?.CategoryName" aria-describedby="text" pattern=".+">
+            </div>
+            @if (!string.IsNullOrEmpty(Model?.CategoryName))
+            {
+                Model.Filter = Model.CategoryName;
+            }
+            <div class="mb-4">
+                <label for="filter" class="form-label fw-bolder">Filter</label>
+                <input type="text" class="form-control" id="filter" name="filter" value="@Model.Filter" aria-describedby="text">
+            </div>
+            <div class="form-check">
+                @*<input class="form-check-input" type="checkbox" @(Model != null && Model.IsActive == true ? "checked" : "") name="kichhoat" id="kichhoat">*@
+                <input class="form-check-input" type="checkbox" @(Model?.IsActive == true ? "checked" : "") name="kichhoat" id="kichhoat">
+                <label class="form-check-label" for="kichhoat">
+                    Kích hoạt
+                </label>
+            </div>
+            <hr />
+            <div class="d-flex align-items-center justify-content-center my-5 gap-5">
+                <button type="submit" id="themgiohang" class="btn btn-primary px-4 py-2" data-bs-toggle="modal" data-bs-target="#errorModal">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Thông báo lỗi</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <p>@ViewBag.ErrorMessage</p>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+        if ('@ViewBag.ErrorMessage' != '') {
+            $('#errorModal').modal('show');
+        }
+    });
+</script>
+

@@ -1,0 +1,113 @@
+﻿@model List<Category>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<nav class="navbar navbar-light bg-light">
+    <form class="form-inline" action="/Categories/Index" method="get">
+        <div class="input-group">
+            <input class="form-control mr-sm-2" type="search" name="filter" placeholder="Search Name or Filter" aria-label="Search">
+            <input class="form-control mr-sm-2" type="number" name="categoryId" placeholder="Search Id" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </div>
+        </div>
+    </form>
+    @*<a class="btn btn-primary" href="@Url.Action("Them", "Categories")" role="button">Thêm</a>*@
+    <form action="@Url.Action("Them", "Categories")" method="post">
+        <input type="submit" value="Thêm" class="btn btn-primary" role="button" />
+    </form>
+</nav>
+<table class="table table-striped overflow-scroll">
+    <thead class="table-success">
+        <tr>
+            <th>STT</th>
+            <th>Category ID</th>
+            <th>Category Name</th>
+            <th>Filter</th>
+            <th>Trạng thái</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            int i = 0;
+            @foreach (var category in Model)
+            {
+                i++;
+                <tr>
+                    <td class="text-center">@i</td>
+                    <td>@category.CategoryId</td>
+                    <td>@category.CategoryName</td>
+                    <td>@category.Filter</td>
+                    @{
+                        var isActive = category.IsActive as bool?;
+                        var isActiveClass = isActive.HasValue ? (isActive.Value ? "text-success" : "text-danger") : "text-warning";
+                        var isActiveText = isActive.HasValue ? (isActive.Value ? "Kích hoạt" : "Tạm khóa") : "Lỗi";
+                    }
+                    <td class="text-center @isActiveClass">
+                        @isActiveText
+                    </td>
+
+                    <td class="text-center">
+                        <a class="px-2 delete-button" href="#deleteModal_@i" data-bs-toggle="modal" data-bs-target="#deleteModal_@i">
+                            <i class="fa fa-trash text-danger" aria-hidden="true"></i>
+                        </a>
+                        <div class="modal fade" id="deleteModal_@i" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel">Xác nhận</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        @if (category.IsActive)
+                                        {
+                                            <p>Bạn không nên xóa, chỉ cần bỏ chọn kích hoạt.</p>
+                                        }
+                                        else
+                                        {
+                                            <p>Bạn có chắc chắn muốn xóa không?</p>
+                                        }
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                        @if (category.IsActive)
+                                        {
+                                            <a href="@Url.Action("CapNhat", "Categories", new { categoryId = category.CategoryId })" class="btn btn-primary">Đồng ý</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@Url.Action("Xoa", "Categories", new { categoryId = category.CategoryId })" class="btn btn-danger">Xóa</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="px-2" href="@Url.Action("CapNhat", "Categories", new { categoryId = category.CategoryId })">
+                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <caption>
+                Không có dữ liệu
+            </caption>
+        }
+
+    </tbody>
+</table>
+
+<script>
+    function openDeleteModal(categoryId) {
+        $('#deleteModal_' + categoryId).modal('show');
+    }
+</script>
+
+
+

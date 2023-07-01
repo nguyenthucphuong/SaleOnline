@@ -1,0 +1,93 @@
+﻿@model SaleOnline.Models.Product
+@{
+    ViewData["Title"] = "Them";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="d-flex justify-content-center">
+    <div class="col-6 px-5 pt-5 border rounded-3 shadow-lg">
+        <h2 class="text-center fw-bold pb-4">Add Product</h2>
+        <hr />
+        <div id="error" class="text-danger"></div>
+        <form action="/Products/Them" method="post">
+            <div class="mb-4">
+                <label for="productId" class="form-label fw-bolder">Product Id</label>
+                <input type="number" class="form-control" id="productId" name="productId" value="@(Model.ProductId == 0 ? "" : Model.ProductId.ToString())" aria-describedby="text" min="1">
+            </div>
+            <div class="mb-4">
+                <label for="userId" class="form-label fw-bolder">User Id</label>
+                <input type="number" class="form-control" id="userId" name="userId" value="@(Model.UserId == 0 ? "" : Model.UserId.ToString())" aria-describedby="text" min="1">
+            </div>
+            <div class="mb-4">
+                <label for="categoryId" class="form-label fw-bolder">Category Id</label>
+                <input type="number" class="form-control" id="categoryId" name="categoryId" value="@(Model.CategoryId == 0 ? "" : Model.CategoryId.ToString())" aria-describedby="text" min="1">
+            </div>
+            <div class="mb-4">
+                <label for="PromotionId" class="form-label fw-bolder">Promotion ID</label>
+                <input type="number" class="form-control" id="PromotionId" name="PromotionId" value="@(Model.PromotionId == 0 ? "" : Model.PromotionId.ToString())" aria-describedby="text" min="1">
+            </div>
+            <div class="mb-4">
+                <label for="productName" class="form-label fw-bolder">Name</label>
+                <input type="text" class="form-control" id="productName" name="productName" value="@Model.ProductName" aria-describedby="text" pattern=".+">
+            </div>
+            <div class="mb-4">
+                <label for="productPrice" class="form-label fw-bolder">Price</label>
+                <input type="number" class="form-control" id="productPrice" name="productPrice" value="@(Model.ProductPrice == 0 ? "" : Model.ProductPrice.ToString())" aria-describedby="text" min="1">
+            </div>
+            <div class="mb-4">
+                <label for="producDes" class="form-label fw-bolder">Description</label>
+                <input type="text" class="form-control" id="producDes" name="producDes" value="@Model.ProducDes" aria-describedby="text" pattern=".+">
+            </div>
+            <div class="mb-4">
+                <label for="productImage" class="form-label fw-bolder">Image</label>
+                <input type="text" class="form-control" id="productImage" name="productImage" value="@Model.ProductImage" aria-describedby="text">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @(Model?.IsNew == true ? "checked" : "") name="isnew" id="isnew">
+                <label class="form-check-label" for="isnew">
+                    New
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @(Model?.IsSale == true ? "checked" : "") name="issale" id="issale">
+                <label class="form-check-label" for="issale">
+                    Hot Sale
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @(Model?.IsPro == true ? "checked" : "") name="ispro" id="ispro">
+                <label class="form-check-label" for="ispro">
+                    Promotion
+                </label>
+            </div>
+            @*@if (!string.IsNullOrEmpty(Model?.ProductName))
+
+            {
+                Model.Filter = Model.ProductName;
+            }*@
+            <div class="mb-4">
+                <label for="filter" class="form-label fw-bolder">Filter</label>
+                <input type="text" class="form-control" id="filter" name="filter" value="@Model?.Filter" aria-describedby="text">
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" @(Model?.IsActive == true ? "checked" : "") name="kichhoat" id="kichhoat">
+                <label class="form-check-label" for="kichhoat">
+                    Kích hoạt
+                </label>
+            </div>
+            <hr />
+            <div class="d-flex align-items-center justify-content-center my-5 gap-5">
+               
+                <button type="submit" id="themgiohang" class="btn btn-primary px-4 py-2">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        if ('@TempData["ErrorMessage"]' != '') {
+            alert('@TempData["ErrorMessage"]');
+        }
+    });
+</script>
